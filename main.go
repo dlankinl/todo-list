@@ -44,7 +44,11 @@ func main() {
 	logger := setupLogger(cfg.Env)
 	_ = logger
 
-	services.InitConnection(fmt.Sprintf("host=%s port=%d user=%s password=%s sslmode=disable", host, port, user, password))
+	dbConn := services.InitConnection(fmt.Sprintf("host=%s port=%d user=%s password=%s sslmode=disable", host, port, user, password))
+
+	defer dbConn.DB.Close()
+
+	services.New(dbConn.DB)
 
 	cfg.Address = "localhost:8083"
 	fmt.Println(cfg.Address)

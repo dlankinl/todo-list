@@ -11,9 +11,8 @@ CREATE TABLE IF NOT EXISTS Tasks (
     user_id INT NOT NULL,
     title VARCHAR(100) NOT NULL,
     description TEXT,
-    priority VARCHAR(10)  CHECK(priority in ('high', 'medium', 'low')) NOT NULL,
+    priority INT NOT NULL CHECK(priority >= 0 AND priority <= 2),
     due_date timestamp,
     completed BOOLEAN NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
-

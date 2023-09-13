@@ -23,6 +23,10 @@ func Routes() http.Handler {
 	}))
 
 	router.Get("/tasks", handlers.GetAllTasks)
+	router.Get("/task/{id}", handlers.GetTaskByID)
+	router.Post("/task", handlers.CreateTask)
+	router.Put("/task/{id}", handlers.UpdateTask)
+	router.Delete("/task/{id}", handlers.DeleteTask)
 
 	return router
 }

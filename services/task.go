@@ -2,20 +2,61 @@ package services
 
 import (
 	"context"
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"log"
 	"reflect"
+	"strings"
 	"time"
 	"todo/models"
 )
 
+// type DueDate time.Time
+type DueDate struct {
+	time.Time
+}
+
 type Task struct {
-	UserID      int             `json:"user_id"`
 	TaskID      int             `json:"task_id"`
+	UserID      int             `json:"user_id"`
 	Title       string          `json:"title"`
 	Description string          `json:"description"`
 	Priority    models.Priority `json:"priority"`
-	DueDate     time.Time       `json:"due_date"`
+	DueDate     DueDate         `json:"due_date"`
 	Completed   bool            `json:"completed"`
+}
+
+func (d *DueDate) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(string(b), "\"")
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return err
+	}
+	//*d = DueDate(t)
+	d.Time = t
+	return nil
+}
+
+func (d DueDate) MarshalJSON() ([]byte, error) {
+	//return json.Marshal(time.Time(d))
+	return json.Marshal(d.Time)
+}
+
+func (d *DueDate) Scan(value interface{}) error {
+	if v, ok := value.(time.Time); ok {
+		d.Time = v
+		//*d = DueDate(v)
+		return nil
+	}
+	return errors.New("Invalid DueDate value")
+}
+
+func (d DueDate) Value() (driver.Value, error) {
+	if d.IsZero() {
+		return nil, nil
+	}
+	return d.Time, nil
 }
 
 func (t *Task) GetAllTasks() ([]*Task, error) {

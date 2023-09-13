@@ -1,9 +1,6 @@
 package config
 
 import (
-	"github.com/ilyakaznacheev/cleanenv"
-	"log"
-	"os"
 	"time"
 )
 
@@ -19,22 +16,22 @@ type HTTPServer struct {
 }
 
 func MustLoad() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
-
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH variable is not set!")
-	}
-
-	if _, err := os.Stat(configPath); err != nil {
-		log.Fatalf("error while opening config file: %s", err)
-	}
+	//configPath := os.Getenv("CONFIG_PATH")
+	//
+	//if configPath == "" {
+	//	log.Fatal("CONFIG_PATH variable is not set!")
+	//}
+	//
+	//if _, err := os.Stat(configPath); err != nil {
+	//	log.Fatalf("error while opening config file: %s", err)
+	//}
 
 	var cfg Config
 
-	err := cleanenv.ReadConfig(configPath, &cfg)
-	if err != nil {
-		log.Fatalf("error while reading config file: %s", err)
-	}
+	//err := cleanenv.ReadConfig(configPath, &cfg)
+	//if err != nil {
+	//	log.Fatalf("error while reading config file: %s", err)
+	//}
 
 	return &cfg
 }

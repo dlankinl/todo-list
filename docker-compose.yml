@@ -1,0 +1,39 @@
+services:
+  db:
+    container_name: todo-db
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5440:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - appnet
+  api:
+    container_name: todo-api
+    build: .
+    ports:
+      - '8083:8083'
+    volumes:
+      - .:/usr/src/app
+    command: go run main.go
+    environment:
+      CONFIG_PATH: "config/config.yaml"
+    depends_on:
+      - db
+    networks:
+      - appnet
+#    links:
+#      - db
+
+networks:
+  appnet:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local

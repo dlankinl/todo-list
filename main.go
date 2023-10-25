@@ -8,7 +8,7 @@ import (
 	"todo/api/routes"
 	"todo/cmd/cli"
 	"todo/config"
-	"todo/services"
+	"todo/db"
 )
 
 const (
@@ -44,11 +44,12 @@ func main() {
 	logger := setupLogger(cfg.Env)
 	_ = logger
 
-	dbConn := services.InitConnection(fmt.Sprintf("host=%s port=%d user=%s password=%s sslmode=disable", host, port, user, password))
+	//dbConn := services.InitConnection(fmt.Sprintf("host=%s port=%d user=%s password=%s sslmode=disable", host, port, user, password))
+	dbConn := db.InitConnection("postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable")
 
 	defer dbConn.DB.Close()
 
-	services.New(dbConn.DB)
+	db.New(dbConn.DB)
 
 	cfg.Address = "localhost:8083"
 	fmt.Println(cfg.Address)

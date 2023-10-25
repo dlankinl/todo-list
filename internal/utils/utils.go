@@ -5,7 +5,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"todo/services"
+	"todo/models"
 )
 
 type Envelope map[string]interface{}
@@ -49,7 +49,7 @@ func ErrorJSON(w http.ResponseWriter, err error, status ...int) {
 	if len(status) > 0 {
 		statusCode = status[0]
 	}
-	var payload services.JSONResponse
+	var payload models.JSONResponse
 	payload.Error = true
 	payload.Msg = err.Error()
 	WriteJSON(w, statusCode, payload)

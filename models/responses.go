@@ -1,4 +1,4 @@
-package services
+package models
 
 type JSONResponse struct {
 	Error bool        `json:"error"`
